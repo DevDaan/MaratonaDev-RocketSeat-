@@ -1,0 +1,207 @@
+criando a aplicação e  arquivo package.JSON
+
+//npm init -y
+
+
+instalando o EXPRESS
+
+/*O EXPRESS É UMA DEPENDENCIA DO NODE. ATRAVÉS DELA CONSEGUIMOS CRIAR CONEXÕES DE SERVIDOR COM O NODE*/
+
+// npm install express
+
+
+
+
+
+PASSO A PASSO PARA CRIAR UM SERVIDOR BACKEND COM O NODE.JS
+
+
+1 - atribuir o express a uma constante:
+	// const express = require('express')
+
+
+2 - atribuir a funconalidade express() a uma constante server:
+	//const server = express()
+	
+	
+//PARA INICIARMOS A CONEXÃO COM O SERVIDOR, PRECISAMOS CRIAR UMA REQUISIÇÃO DO TIPO GET, PARA QUE O NODE ENCONTRE O CAMINHO QUE VOCE ESTÁ QUERENDO PASSAR PARA ISSO, PRECISAMOS PARRAR COMO PARAMETRO DO SERVER.GET, UMA CALLBACK QUE RECEBE DOIS PARAMETROS DE ENTRADA (REQ E RES - REQUISIÇÃO E RESPOSTA)
+
+3 - chamando o server.get e passando os parametros de requisição e resposta
+	/*server.get("/", function(req, res){
+		return res.send("Achei o caminho!!")
+	})
+	
+	EXPLICANDO A BARRA "/" NO GET: A BARRA SERVE PARA PEGAR O FINAL DO CAMINHO E REALIZAR A FUNÇÃO PARA FAZER ALGO. QUANDO PASSAMOS A BARRA COMO PARAMETRO, ESTAMOS INDICANDO PARA O SERVIDO QUE QUEREMOS EXECUTAR ALGUMA COISA DEPOIS DA BARRA QUE FICA NO FINAL DA URL (NO EXEMPLO ACIMA EXECUTAMOS UM ENVIO DE RESPOSTA PARA MOSTRAR UMA MENSAGEM NA TELA*/
+
+
+4 - INICIANDO A CONEXÃO COM O SERVIDOR:
+	//server.listen(3000)//fazendo com que o servidor escute a porta 3000.
+	
+
+
+
+INSTALANDO NO NODEMON PARA REINCIAR O SERVIDOR DE FORMA AUTOMÁTICA
+
+
+PASSO 1: - Instalamos através do // npm install nodemon
+
+
+PASSO 2: VAMOS ATÉ O ARQUIVO PACKAGE.JSON E MODIFICAMOS A PARTE SCRIPTS, PARA FAZER O NODEMOON INICIAR JUNTO COM O ARQUIVO SERVER.JS
+	/* "scripts": {
+    "start": "nodemon server.js"
+  },*/
+
+
+
+
+UTILIZANDO OS ARQUIVOS CRIADOS NO FRONT END  NO BACK END
+
+Antes de qualquer coisa, precisamos deixar a nossa página HTML um poquinho mais dinâmica. Para fazer isso utilizaremos uma ferramenta chamada nunjucks.
+
+O nunjucks nos permite utilizar variáveis dentro da página html, entre várias outras coisas.
+	// npm install nunjucks
+
+
+Podemos dizer que o nunjucks é uma TEMPLATE ENGINE
+
+
+// PARA UTILIZAR O NUNJUCKS, PRECISAMOS CONFIGURA LO NO NOSSO SERVER.JS
+	/*
+	const nunjucks = require("nunjucks")
+	nunjucks.configure("./", {
+		express: server,
+		noCache: true
+	})
+
+o nunjucks.configure pede como parametro o caminho do seu index html. No caso colocamos o ./ para dizer que o arquivo se encontra na raiz do nosso projeto. o objeto express: server indica para o nunjucks que ele deverá atuar dentro da variável server e trabalhar emcima do express.
+*/
+
+
+
+
+PARA FAZER O NOSSO INDEX.HTML FUNCINAR, TROCAREMOS O RES.SEND POR RES.RENDER("index.html)
+	//server.get("/", (req, res) => res.render("index.html"))
+	
+	
+//QUANDO FAZEMOS ISSO, O NUNJUCKS TRAS APENAS O CONTEUDO DA PÁGINA HTML, DEIXANDO DE LADO O CSS E O ARQUIVO DE OCNFIGURAÇÃO JS.
+
+
+
+CONFIGURANDO O SERVIDOR PARA APRESENTAR ARQUIVOS EXTRAS.
+
+	//server.use(express.static('public'))
+	
+//OBS: QUANDO  colocamos a palavra 'public' como parametro da função, estamos dizendo para o servidor que ele deverá utilizar todos os arquivos que estiverem dentro desta pasta. ENTÃO TEMOS QUE CRIAR NA RAIZ DO NOSSO PROJETO UMA PASTA COM O MESMO NOME DO PARAMETRO QUE PASSAMOS E MOVER TODOS OS ARQUIVOS QUE QUISERMOS QUE O SERVIDOR LEIA PARA LÁ, PORÉM ,NÃO PODEMOS ESQUECER DE ALTERAR OS CAMINHOS DOS ARQUIVOS NOS SCRIPS INDEX HTML E STYLE.CSS, POIS ELES FORAM MOVIDOS PARA OUTRO LOCAL.
+
+
+
+
+
+AGORA VAMOS TRABALHAR PARA  MANIPULAR OS DADOS COM O BANCO DE DADOS
+
+
+ENTENDENDO O AGRUPAMNTO DE DADOS:
+
+
+const estante = [
+	
+	{marca: "Cola-cola"},
+	{marca: "Cola-cola"},
+	{marca: "Cola-cola"}
+]
+
+
+// no exemplo acima, temos um array que armazena diversos objetos :D
+
+
+// LISTA DE DOADORES: VETOR OU ARRAY
+const donors = [
+    {
+        name: "Diego Fernandes",
+        blood: "AB+"
+    },
+    
+    {
+        name: "Cleiton Souza",
+        blood: "B+"
+    },
+    
+    {
+        name: "Robson Marques",
+        blood: "A+"
+    },
+    
+    {
+        name: "Mayk Brito",
+        blood: "O+"
+    }
+
+
+]
+
+//DEPOIS QUE CRIAMOS A CONSTANTE DNORS COM O NOME DOS DOADORES, TEMOS QUE ALTERAR O CÓDIGO NO INDEX HTML. COMO NÃO CONSEGUIMOS PREVER QUANTAS PESSOAS IRÃO SE CADASTRAR PARA DOAR O SANGUE, DEVEMOS CRIAR UM LAÇO DE REPETIÇÃO PARA QUE O SISTEMA MOSTRE NA TELA DE FORMA AUTOMÁTICA AS PESSOAS QUE SE CADASTRAREM
+
+	//NO ARQUIVO INDEX.HTML, NA PARTE <main> h2 ultimos doadores: 
+	
+    <main>
+        <!--Conteudo central-->
+        <h2>Últimos <span>doadores</span></h2>
+        <section class = "donors">
+            {% for donor in donors %}
+                <div class = "donor">
+                    <div class = "blood"> {{donor.blood}}</div>
+                    <p>{{donor.name}}</p>
+                </div>
+            {%endfor%}
+        </section>
+    </main>
+	
+	
+	
+PARA PEGAR OS DADOS INSERIDOS NO FORMULÁRIO, DEVEMOS CRIAR UM MÉTODO POST
+
+
+// CONFIGURANDO O SERVER PARA RECEBER OS DADOS DO FORMULÁRIO
+server.post("/", function(req, res){
+    const name = req.body.name
+    const email = req.body.email
+    const blood = req.body.blood
+})
+
+
+// TAMBÉM DEVEMOS IR NO INDEX HTML E ADICIONAR O METHOD="POST" NAS CARACTERISTICAS DO MEU FORMULÁRIO.
+
+
+
+DEPOIS DE FAZER ISSO, TEMOS QUE FAZER UM PUSH NO ARRAY DONORS PARA QUE ELE ARMAZENE AS INFORMAÇÕES EXTRAIDAS DO FORMULÁRIO, DESTA FORMA:
+
+
+   // COLOCANDO VALORES DENTRO DO ARRAY
+
+    donors.push({
+        name: name,
+        blood: blood})
+
+    return res.redirect("/")
+})
+
+
+
+
+//APÓS FAZER ISSO, OS NOMES QUE FOREM INSERIDOS NO FORMULÁRIO IRÃO APARECER NA LISTA DE DOADORES, PORÉM TEMOS QUE CONFIGURAR O NOSSO CSS PARA RECEBER MAIS DE 4 DOADORES, PARA A PAGINA FICAR VISIVELMENTE LEGAL.
+
+
+
+.donor p {
+    margin-top: 24px;
+    margin-bottom: 64px; //ADICIONAMOS ESSE NO CSS
+    font-size: 14px;
+}
+  
+  
+  
+  
+  
+  
+  
+  

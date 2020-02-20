@@ -1,0 +1,25 @@
+{
+  "name": "MaratonaDev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevDaan/MaratonaDev-RocketSeat-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevDaan/MaratonaDev-RocketSeat-/issues"
+  },
+  "homepage": "https://github.com/DevDaan/MaratonaDev-RocketSeat-#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2",
+    "nunjucks": "^3.2.0"
+  }
+}
